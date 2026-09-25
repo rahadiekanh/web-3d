@@ -1,797 +1,592 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lamborghini SVJ 3D Concept</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <style>
-      :root {
-        --bg: #100508;
-        --bg2: #1f070b;
-        --panel: rgba(255, 255, 255, 0.06);
-        --panel-strong: rgba(255, 255, 255, 0.09);
-        --line: rgba(255, 255, 255, 0.14);
-        --red: #dc2f2f;
-        --red-soft: #ff544d;
-        --red-dark: #730d15;
-        --gold: #ffcf70;
-        --text: #f7f5f3;
-        --muted: rgba(255, 255, 255, 0.72);
-        --shadow: rgba(0, 0, 0, 0.5);
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lamborghini Aventador SVJ — 3D Experience</title>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+    :root {
+      --lime: #caff00;
+      --white: #f4f4f4;
+      --muted: #8c8c8c;
+      --panel: rgba(12, 12, 12, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      color: var(--white);
+      background: #050505;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    #scene {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, .94) 0%, rgba(0, 0, 0, .48) 40%, rgba(0, 0, 0, .25) 100%),
+        radial-gradient(circle at 72% 45%, rgba(202, 255, 0, .12), transparent 30%),
+        url("svj-reference.jpg") center / cover no-repeat;
+      filter: saturate(.7) brightness(.42);
+    }
+
+    .background::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(transparent 70%, #050505 100%);
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 5vw;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      font-weight: 900;
+      letter-spacing: .17em;
+      font-size: 12px;
+    }
+
+    .brand-mark {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--lime);
+      transform: rotate(45deg);
+      display: grid;
+      place-items: center;
+    }
+
+    .brand-mark span {
+      color: var(--lime);
+      transform: rotate(-45deg);
+      font-size: 13px;
+    }
+
+    nav {
+      display: flex;
+      gap: 28px;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: inherit;
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+
+    nav a:hover {
+      color: var(--lime);
+    }
+
+    .hero {
+      position: fixed;
+      z-index: 4;
+      top: 22vh;
+      left: 5vw;
+      width: min(470px, 90vw);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--lime);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 42px;
+      height: 1px;
+      background: var(--lime);
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      font-size: clamp(44px, 7vw, 92px);
+      line-height: .88;
+      letter-spacing: -.08em;
+      text-transform: uppercase;
+    }
+
+    h1 strong {
+      color: var(--lime);
+      font-weight: 900;
+    }
+
+    .description {
+      max-width: 380px;
+      color: #bdbdbd;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      pointer-events: auto;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      padding: 15px 20px;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .primary {
+      color: #080808;
+      background: var(--lime);
+    }
+
+    .secondary {
+      color: var(--white);
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+    }
+
+    .specs {
+      position: fixed;
+      left: 5vw;
+      bottom: 42px;
+      z-index: 4;
+      display: flex;
+      gap: 34px;
+    }
+
+    .spec {
+      min-width: 75px;
+      border-left: 1px solid var(--lime);
+      padding-left: 12px;
+    }
+
+    .spec b {
+      display: block;
+      color: var(--white);
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+
+    .spec span {
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .hint {
+      position: fixed;
+      right: 5vw;
+      bottom: 42px;
+      z-index: 4;
+      color: #aaa;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-align: right;
+    }
+
+    .hint span {
+      color: var(--lime);
+    }
+
+    #loading {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      background: #050505;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+
+    #loading.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-content {
+      text-align: center;
+    }
+
+    .loader-content strong {
+      display: block;
+      margin-bottom: 16px;
+      color: var(--lime);
+      font-size: 13px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .loader-bar {
+      width: 180px;
+      height: 2px;
+      overflow: hidden;
+      background: #252525;
+    }
+
+    .loader-bar::after {
+      content: "";
+      display: block;
+      width: 45%;
+      height: 100%;
+      background: var(--lime);
+      animation: loading 1.2s infinite ease-in-out;
+    }
+
+    @keyframes loading {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(350%); }
+    }
+
+    #error {
+      position: fixed;
+      left: 50%;
+      bottom: 25%;
+      z-index: 8;
+      display: none;
+      width: min(430px, 84vw);
+      transform: translateX(-50%);
+      padding: 20px;
+      color: #ddd;
+      background: rgba(8,8,8,.9);
+      border: 1px solid rgba(202,255,0,.45);
+      font-size: 12px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      nav {
+        display: none;
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      html, body {
-        margin: 0;
-        height: 100%;
-        background:
-          radial-gradient(circle at 20% 20%, rgba(255, 80, 80, 0.18), transparent 30%),
-          radial-gradient(circle at 80% 25%, rgba(255, 120, 120, 0.1), transparent 28%),
-          linear-gradient(125deg, #090607 0%, var(--bg) 35%, #22070c 70%, #120508 100%);
-        color: var(--text);
-        font-family: "Inter", sans-serif;
-        overflow-x: hidden;
-      }
-
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background:
-          linear-gradient(rgba(255,255,255,0.015), rgba(255,255,255,0.015)),
-          repeating-linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.04),
-            rgba(255,255,255,0.04) 1px,
-            transparent 1px,
-            transparent 6px
-          );
-        pointer-events: none;
-        mix-blend-mode: screen;
-      }
-
-      .page {
-        width: min(1280px, calc(100% - 48px));
-        margin: 0 auto;
-        position: relative;
-        z-index: 2;
-      }
-
-      .topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 26px 0 18px;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        font-family: "Orbitron", sans-serif;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-      }
-
-      .brand-mark {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        position: relative;
-        background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.03));
-        border: 1px solid rgba(255,255,255,0.16);
-        box-shadow: inset 0 0 20px rgba(255,255,255,0.04), 0 0 18px rgba(255, 80, 80, 0.22);
-      }
-
-      .brand-mark::before {
-        content: "";
-        position: absolute;
-        inset: 9px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #fff 0%, #f5d2d2 16%, #f36a6d 38%, #7c0d15 70%, #1d0909 100%);
-        transform: skewY(-14deg);
-      }
-
-      .nav {
-        display: flex;
-        gap: 32px;
-        align-items: center;
-      }
-
-      .nav a {
-        color: var(--muted);
-        text-decoration: none;
-        font-size: 0.78rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        transition: color 0.25s ease;
-      }
-
-      .nav a:hover {
-        color: #fff;
-      }
-
-      .nav .cta-link {
-        padding: 12px 20px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,0.18);
-        background: rgba(255,255,255,0.03);
-        backdrop-filter: blur(6px);
+      header {
+        padding: 22px 6vw;
       }
 
       .hero {
-        display: grid;
-        grid-template-columns: 1.05fr 1.35fr;
-        align-items: center;
-        min-height: 720px;
-        gap: 36px;
+        top: 17vh;
+        left: 6vw;
       }
 
-      .headline {
-        position: relative;
-        z-index: 3;
-      }
-
-      .eyebrow {
-        display: inline-block;
-        font-family: "Orbitron", sans-serif;
-        text-transform: uppercase;
-        letter-spacing: 0.3em;
-        font-size: 0.72rem;
-        padding: 9px 16px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,0.16);
-        background: rgba(255,255,255,0.02);
-        color: #f5d9d8;
-        margin-bottom: 20px;
-      }
-
-      h1 {
-        margin: 0;
-        font-family: "Orbitron", sans-serif;
-        font-weight: 800;
-        font-size: clamp(3.2rem, 5vw, 6.4rem);
-        line-height: 0.94;
-        letter-spacing: -0.05em;
-        text-transform: uppercase;
-      }
-
-      .highlight {
-        display: block;
-        background: linear-gradient(90deg, #fff 0%, #ffd5cf 28%, #ff7f70 45%, #ff4858 75%, #d9112b 100%);
-        -webkit-background-clip: text;
-        color: transparent;
-        text-shadow: 0 0 30px rgba(255, 99, 99, 0.26);
-      }
-
-      .subtitle {
-        margin-top: 24px;
-        max-width: 620px;
-        font-size: 1.08rem;
-        color: var(--muted);
-        line-height: 1.8;
-      }
-
-      .actions {
-        display: flex;
-        gap: 18px;
-        margin-top: 32px;
-        flex-wrap: wrap;
-      }
-
-      .btn {
-        border: none;
-        cursor: pointer;
-        padding: 16px 26px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        border-radius: 999px;
-        transition: transform 0.2s ease, box-shadow 0.25s ease;
-      }
-
-      .btn:hover {
-        transform: translateY(-1px);
-      }
-
-      .btn.primary {
-        background: linear-gradient(135deg, #ff6f66 0%, #d70d1d 50%, #7a0717 100%);
-        color: white;
-        box-shadow: 0 12px 24px rgba(165, 17, 31, 0.5);
-      }
-
-      .btn.secondary {
-        background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(255,255,255,0.18);
-        color: #fff;
-      }
-
-      .metrics {
-        margin-top: 46px;
-        display: flex;
-        gap: 22px;
-        flex-wrap: wrap;
-      }
-
-      .metric {
-        min-width: 150px;
-        padding: 18px 20px 16px;
-        background: rgba(255,255,255,0.03);
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        backdrop-filter: blur(8px);
-        box-shadow: inset 0 0 16px rgba(255,255,255,0.02);
-      }
-
-      .metric strong {
-        display: block;
-        font-family: "Orbitron", sans-serif;
-        font-size: 1.8rem;
-        font-weight: 700;
-        line-height: 1;
-        margin-bottom: 8px;
-      }
-
-      .metric span {
-        color: var(--muted);
-        font-size: 0.72rem;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-      }
-
-      .visual {
-        position: relative;
-        height: 620px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        perspective: 1600px;
-      }
-
-      .visual::before {
-        content: "";
-        position: absolute;
-        width: 620px;
-        height: 620px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(255, 82, 82, 0.24), rgba(143, 18, 31, 0.08) 30%, transparent 66%);
-        filter: blur(10px);
-      }
-
-      .ring {
-        position: absolute;
-        width: 720px;
-        height: 720px;
-        border-radius: 50%;
-        border: 1px solid rgba(255,255,255,0.1);
-        box-shadow:
-          inset 0 0 30px rgba(255,255,255,0.04),
-          0 0 60px rgba(255, 72, 72, 0.12);
-        transform: rotateX(68deg) rotateZ(10deg);
-      }
-
-      .scene {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transform-style: preserve-3d;
-        transition: transform 0.28s ease-out;
-      }
-
-      .car {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 820px;
-        height: 300px;
-        transform: translate(-50%, -50%) rotateX(18deg) rotateY(-8deg) rotateZ(-2deg);
-        transform-style: preserve-3d;
-        animation: floatCar 5.5s ease-in-out infinite;
-      }
-
-      @keyframes floatCar {
-        0%, 100% { transform: translate(-50%, -50%) rotateX(18deg) rotateY(-8deg) rotateZ(-2deg) translateY(0px); }
-        50% { transform: translate(-50%, -50%) rotateX(20deg) rotateY(-6deg) rotateZ(-1deg) translateY(-16px); }
-      }
-
-      .shadow {
-        position: absolute;
-        left: 12%;
-        right: 10%;
-        bottom: -20px;
-        height: 90px;
-        border-radius: 50%;
-        background: radial-gradient(ellipse at center, rgba(0,0,0,0.7), rgba(0,0,0,0) 70%);
-        filter: blur(18px);
-        transform: translateZ(-80px) scaleY(0.8);
-      }
-
-      .body-shell {
-        position: absolute;
-        left: 10%;
-        right: 10%;
-        top: 58%;
-        height: 110px;
-        transform: translateY(-50%) translateZ(40px);
-        border-radius: 28px 42px 26px 22px;
-        background: linear-gradient(
-          135deg,
-          #f5f5f4 0%,
-          #dfe3e7 12%,
-          #8a9098 19%,
-          #1d1e22 30%,
-          #090b0d 42%,
-          #4e5158 48%,
-          #1e2026 60%,
-          #05070d 100%
-        );
-        border: 1px solid rgba(255,255,255,0.18);
-        box-shadow:
-          0 36px 42px rgba(0,0,0,0.5),
-          inset 0 0 18px rgba(255,255,255,0.1),
-          inset 0 0 26px rgba(255, 80, 80, 0.08);
-      }
-
-      .body-shell::before {
-        content: "";
-        position: absolute;
-        inset: 10px 18px 18px 18px;
-        border-radius: 22px 38px 18px 16px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.03), rgba(0,0,0,0.22));
-        border: 1px solid rgba(255,255,255,0.09);
-      }
-
-      .hood {
-        position: absolute;
-        left: 32%;
-        top: 46%;
-        width: 26%;
-        height: 34px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02));
-        border-radius: 18px 28px 10px 18px;
-        transform: translateZ(34px) skewX(-18deg);
-        box-shadow: inset 0 0 14px rgba(255,255,255,0.1);
-      }
-
-      .cockpit {
-        position: absolute;
-        left: 43%;
-        top: 34%;
-        width: 26%;
-        height: 72px;
-        border-radius: 30px 34px 12px 18px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(30,30,30,0.9));
-        border: 1px solid rgba(255,255,255,0.14);
-        transform: skewX(-12deg) translateZ(56px);
-        box-shadow: inset 0 0 22px rgba(220, 228, 255, 0.08);
-      }
-
-      .cockpit::before {
-        content: "";
-        position: absolute;
-        inset: 12px 18px 8px 18px;
-        border-radius: 22px 26px 10px 12px;
-        background: linear-gradient(180deg, rgba(20,20,20,0.9), rgba(80,90,100,0.8));
-        border: 1px solid rgba(255,255,255,0.07);
-      }
-
-      .rear {
-        position: absolute;
-        right: 12%;
-        top: 51%;
-        width: 18%;
-        height: 72px;
-        border-radius: 18px 30px 12px 18px;
-        background: linear-gradient(90deg, rgba(10,10,12,0.8), rgba(80,80,90,0.15));
-        transform: translateZ(22px);
-      }
-
-      .spoiler {
-        position: absolute;
-        right: 8%;
-        top: 39%;
-        width: 16%;
-        height: 14px;
-        background: linear-gradient(90deg, #1e2128, #5d6473, #1b1d20);
-        border-radius: 18px;
-        transform: translateZ(70px) rotate(-2deg);
-      }
-
-      .door-line {
-        position: absolute;
-        left: 46%;
-        top: 52%;
-        width: 34%;
-        height: 2px;
-        background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0));
-        transform: translateZ(66px);
-      }
-
-      .front-light {
-        position: absolute;
-        left: 10%;
-        top: 52%;
-        width: 72px;
-        height: 18px;
-        background: linear-gradient(90deg, #fff8d7, #ffbf5d, #ff6a45);
-        border-radius: 18px 10px 8px 14px;
-        box-shadow: 0 0 18px rgba(255, 190, 90, 0.8);
-        transform: translateZ(48px);
-      }
-
-      .rear-light {
-        position: absolute;
-        right: 10%;
-        top: 56%;
-        width: 76px;
-        height: 16px;
-        background: linear-gradient(90deg, #ff5454, #8a0f19);
-        border-radius: 10px 18px 14px 6px;
-        box-shadow: 0 0 18px rgba(255, 90, 90, 0.65);
-        transform: translateZ(46px);
-      }
-
-      .wheel {
-        position: absolute;
-        width: 118px;
-        height: 118px;
-        border-radius: 50%;
-        bottom: 0;
-        background: radial-gradient(circle, #c8ccd0 0%, #636b72 18%, #15191d 22%, #030607 52%, #1c2025 76%, #090b0d 100%);
-        border: 8px solid rgba(12,17,22,0.9);
-        box-shadow:
-          inset 0 0 20px rgba(255,255,255,0.08),
-          0 14px 18px rgba(0,0,0,0.48),
-          0 0 14px rgba(255, 90, 90, 0.08);
-      }
-
-      .wheel::before {
-        content: "";
-        position: absolute;
-        inset: 22px;
-        border-radius: 50%;
-        border: 5px solid rgba(255,255,255,0.14);
-        background: radial-gradient(circle, #f0f4f8 0%, #8d9196 20%, #171c20 32%, #040607 55%, #080a0c 100%);
-      }
-
-      .wheel::after {
-        content: "";
-        position: absolute;
-        inset: 38px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.08));
-      }
-
-      .wheel.front {
-        left: 18%;
-      }
-
-      .wheel.rear {
-        right: 18%;
-      }
-
-      .glass {
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.02));
-        filter: blur(2px);
+      .description {
+        font-size: 12px;
       }
 
       .specs {
-        margin-top: 28px;
-        display: grid;
-        grid-template-columns: repeat(4, minmax(180px, 1fr));
-        gap: 18px;
+        left: 6vw;
+        bottom: 28px;
+        gap: 17px;
       }
 
-      .spec-card {
-        padding: 26px 22px;
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 18px;
-        backdrop-filter: blur(8px);
-        box-shadow: inset 0 0 16px rgba(255,255,255,0.03), 0 18px 28px rgba(0,0,0,0.18);
+      .spec b {
+        font-size: 16px;
       }
 
-      .spec-card .label {
-        font-size: 0.74rem;
-        color: var(--muted);
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        margin-bottom: 14px;
+      .hint {
+        display: none;
       }
+    }
+  </style>
+</head>
 
-      .spec-card .value {
-        font-family: "Orbitron", sans-serif;
-        font-size: clamp(1.5rem, 2vw, 2.2rem);
-        line-height: 1.1;
-        font-weight: 700;
-      }
+<body>
+  <div class="background"></div>
+  <div id="scene"></div>
 
-      .spec-card .unit {
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #f8d4d4;
-      }
+  <div id="loading">
+    <div class="loader-content">
+      <strong>Loading SVJ Experience</strong>
+      <div class="loader-bar"></div>
+    </div>
+  </div>
 
-      .story {
-        margin-top: 42px;
-        display: grid;
-        grid-template-columns: 1.1fr 0.9fr;
-        gap: 26px;
-        padding-bottom: 80px;
-      }
+  <div id="error">
+    File model 3D belum ditemukan.<br><br>
+    Pastikan file bernama <b>lamborghini-svj.glb</b> berada di folder yang sama dengan
+    <b>index.html</b>. Model generik tidak digunakan.
+  </div>
 
-      .box {
-        padding: 28px 26px;
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 22px;
-        backdrop-filter: blur(8px);
-      }
-
-      .box h3 {
-        margin: 0 0 16px;
-        font-family: "Orbitron", sans-serif;
-        font-size: 0.95rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: #f5d0c8;
-      }
-
-      .box p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.9;
-        font-size: 1rem;
-      }
-
-      .mini-list {
-        display: grid;
-        gap: 16px;
-      }
-
-      .mini-item {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 14px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-      }
-
-      .mini-item:last-child {
-        border-bottom: none;
-      }
-
-      .mini-item span:first-child {
-        color: var(--muted);
-      }
-
-      .mini-item span:last-child {
-        font-weight: 700;
-      }
-
-      @media (max-width: 980px) {
-        .hero {
-          grid-template-columns: 1fr;
-          gap: 20px;
-          padding-top: 16px;
-        }
-
-        .visual {
-          order: -1;
-          height: 480px;
-        }
-
-        .specs {
-          grid-template-columns: repeat(2, minmax(160px, 1fr));
-        }
-
-        .story {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 760px) {
-        .page {
-          width: min(100% - 24px, 1280px);
-        }
-
-        .topbar {
-          flex-direction: column;
-          gap: 18px;
-        }
-
-        .nav {
-          gap: 14px;
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-
-        .nav a {
-          letter-spacing: 0.08em;
-        }
-
-        .visual {
-          height: 360px;
-        }
-
-        .car {
-          width: 620px;
-          height: 220px;
-        }
-
-        .wheel {
-          width: 88px;
-          height: 88px;
-        }
-
-        .specs {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="page">
-      <header class="topbar">
-        <div class="brand">
-          <div class="brand-mark"></div>
-          <span>SVJ</span>
-        </div>
-
-        <nav class="nav">
-          <a href="#">Overview</a>
-          <a href="#">Performance</a>
-          <a href="#">Design</a>
-          <a href="#" class="cta-link">Book Test</a>
-        </nav>
-      </header>
-
-      <main class="hero">
-        <section class="headline">
-          <div class="eyebrow">Lamborghini</div>
-          <h1>
-            <span class="highlight">SVJ</span>
-            Track Fury.
-          </h1>
-
-          <p class="subtitle">
-            Kombinasi antara aerodinamika ekstrem, V12 bertenaga tinggi, dan desain agresif yang
-            menghadirkan sensasi mengemudi yang tak tertandingi. Sebuah supercar yang diciptakan
-            untuk mengubah jalanan menjadi sirkuit pribadi.
-          </p>
-
-          <div class="actions">
-            <button class="btn primary">Explore</button>
-            <button class="btn secondary">Spec Sheet</button>
-          </div>
-
-          <div class="metrics">
-            <div class="metric">
-              <strong>759</strong>
-              <span>HP</span>
-            </div>
-            <div class="metric">
-              <strong>2.8s</strong>
-              <span>0-100 km/h</span>
-            </div>
-            <div class="metric">
-              <strong>350</strong>
-              <span>km/h</span>
-            </div>
-          </div>
-        </section>
-
-        <section class="visual">
-          <div class="ring"></div>
-          <div class="scene" id="scene">
-            <div class="car">
-              <div class="shadow"></div>
-
-              <div class="body-shell">
-                <div class="glass"></div>
-              </div>
-
-              <div class="hood"></div>
-              <div class="cockpit"></div>
-              <div class="rear"></div>
-              <div class="spoiler"></div>
-              <div class="door-line"></div>
-              <div class="front-light"></div>
-              <div class="rear-light"></div>
-
-              <div class="wheel front"></div>
-              <div class="wheel rear"></div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <section class="specs">
-        <div class="spec-card">
-          <div class="label">Engine</div>
-          <div class="value">6.5L</div>
-          <div class="unit">V12 Naturally Aspirated</div>
-        </div>
-
-        <div class="spec-card">
-          <div class="label">Power</div>
-          <div class="value">759</div>
-          <div class="unit">Horsepower</div>
-        </div>
-
-        <div class="spec-card">
-          <div class="label">Torque</div>
-          <div class="value">720</div>
-          <div class="unit">Nm</div>
-        </div>
-
-        <div class="spec-card">
-          <div class="label">Aero</div>
-          <div class="value">AERO</div>
-          <div class="unit">Active Splitter</div>
-        </div>
-      </section>
-
-      <section class="story">
-        <div class="box">
-          <h3>Design Philosophy</h3>
-          <p>
-            Lamborghini SVJ dibangun untuk membuktikan bahwa kecepatan bukan hanya soal mesin,
-            tetapi juga tentang aliran udara, stabilitas, dan karakter desain. Garis bodinya
-            menciptakan kesan agresif sekaligus aerodinamis, begitu pula dengan pelek dan sayap
-            aktif yang membantu menahan gaya saat melaju sangat cepat.
-          </p>
-        </div>
-
-        <div class="box">
-          <h3>Performance Highlights</h3>
-          <div class="mini-list">
-            <div class="mini-item">
-              <span>0–100 km/h</span>
-              <span>2.8s</span>
-            </div>
-            <div class="mini-item">
-              <span>Top Speed</span>
-              <span>350 km/h</span>
-            </div>
-            <div class="mini-item">
-              <span>Drive</span>
-              <span>AWD</span>
-            </div>
-            <div class="mini-item">
-              <span>Weight</span>
-              <span>1,525 kg</span>
-            </div>
-          </div>
-        </div>
-      </section>
+  <header>
+    <div class="brand">
+      <div class="brand-mark"><span>SVJ</span></div>
+      AUTOMOBILI LAMBORGHINI
     </div>
 
-    <script>
-      const scene = document.getElementById('scene');
+    <nav>
+      <a href="#design">Design</a>
+      <a href="#performance">Performance</a>
+      <a href="#experience">Experience</a>
+    </nav>
+  </header>
 
-      document.addEventListener('mousemove', (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 18;
-        const y = (e.clientY / window.innerHeight - 0.5) * -18;
+  <main class="hero">
+    <div class="eyebrow">V12 naturally aspirated</div>
 
-        scene.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
-      });
+    <h1>
+      Aventador<br>
+      <strong>SVJ</strong>
+    </h1>
 
-      document.addEventListener('mouseleave', () => {
-        scene.style.transform = 'rotateX(0deg) rotateY(0deg)';
-      });
-    </script>
-  </body>
+    <p class="description">
+      Experience the uncompromising character of the Lamborghini Aventador SVJ.
+      Drag untuk memutar mobil dan gunakan scroll untuk memperbesar tampilan.
+    </p>
+
+    <div class="actions">
+      <button class="primary" id="viewCar">Explore the car</button>
+      <button class="secondary" id="resetView">Reset view</button>
+    </div>
+  </main>
+
+  <section class="specs">
+    <div class="spec">
+      <b>770 CV</b>
+      <span>Power</span>
+    </div>
+
+    <div class="spec">
+      <b>2.8 s</b>
+      <span>0–100 km/h</span>
+    </div>
+
+    <div class="spec">
+      <b>350+</b>
+      <span>Top speed</span>
+    </div>
+  </section>
+
+  <div class="hint">
+    <span>Drag</span> to rotate<br>
+    <span>Scroll</span> to zoom
+  </div>
+
+  <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+    import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
+    import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
+    import { RoomEnvironment } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js";
+
+    const container = document.getElementById("scene");
+    const loading = document.getElementById("loading");
+    const errorBox = document.getElementById("error");
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(
+      35,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100
+    );
+
+    camera.position.set(5.5, 2.15, 6.4);
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true
+    });
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    container.appendChild(renderer.domElement);
+
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmremGenerator.fromScene(
+      new RoomEnvironment(renderer),
+      0.04
+    ).texture;
+
+    const ambient = new THREE.HemisphereLight(0xffffff, 0x111111, 1.8);
+    scene.add(ambient);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 5);
+    keyLight.position.set(-4, 7, 5);
+    keyLight.castShadow = true;
+    scene.add(keyLight);
+
+    const greenLight = new THREE.PointLight(0xcaff00, 8, 8);
+    greenLight.position.set(2, 1, -3);
+    scene.add(greenLight);
+
+    const redLight = new THREE.PointLight(0xff3b16, 3, 7);
+    redLight.position.set(-4, 1, -2);
+    scene.add(redLight);
+
+    const floor = new THREE.Mesh(
+      new THREE.CircleGeometry(8, 64),
+      new THREE.MeshStandardMaterial({
+        color: 0x080808,
+        metalness: .9,
+        roughness: .22,
+        transparent: true,
+        opacity: .82
+      })
+    );
+
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -1.12;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    const grid = new THREE.GridHelper(16, 32, 0x333333, 0x111111);
+    grid.position.y = -1.1;
+    grid.material.transparent = true;
+    grid.material.opacity = .22;
+    scene.add(grid);
+
+    const carGroup = new THREE.Group();
+    scene.add(carGroup);
+
+    let originalCameraPosition = camera.position.clone();
+    let loadedModel = null;
+
+    const loader = new GLTFLoader();
+
+    loader.load(
+      "lamborghini-svj.glb",
+
+      (gltf) => {
+        loadedModel = gltf.scene;
+
+        const box = new THREE.Box3().setFromObject(loadedModel);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+
+        const maxSize = Math.max(size.x, size.y, size.z);
+        const scale = 5.2 / maxSize;
+
+        loadedModel.scale.setScalar(scale);
+
+        loadedModel.position.x = -center.x * scale;
+        loadedModel.position.y = -center.y * scale - 1.05;
+        loadedModel.position.z = -center.z * scale;
+
+        loadedModel.traverse((object) => {
+          if (object.isMesh) {
+            object.castShadow = true;
+            object.receiveShadow = true;
+
+            if (object.material) {
+              object.material.envMapIntensity = 1.8;
+            }
+          }
+        });
+
+        carGroup.add(loadedModel);
+
+        loading.classList.add("hidden");
+      },
+
+      undefined,
+
+      () => {
+        loading.classList.add("hidden");
+        errorBox.style.display = "block";
+      }
+    );
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+
+    controls.enableDamping = true;
+    controls.dampingFactor = .055;
+    controls.enablePan = false;
+    controls.minDistance = 3.5;
+    controls.maxDistance = 10;
+    controls.minPolarAngle = Math.PI * .28;
+    controls.maxPolarAngle = Math.PI * .58;
+    controls.target.set(0, -.2, 0);
+
+    document.getElementById("resetView").addEventListener("click", () => {
+      camera.position.copy(originalCameraPosition);
+      controls.target.set(0, -.2, 0);
+      controls.update();
+    });
+
+    document.getElementById("viewCar").addEventListener("click", () => {
+      camera.position.set(4.15, 1.25, 4.55);
+      controls.target.set(0, -.35, 0);
+      controls.update();
+    });
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const elapsed = clock.getElapsedTime();
+
+      if (loadedModel) {
+        loadedModel.position.y =
+          -centerlessY() - 1.05 + Math.sin(elapsed * 1.3) * .012;
+      }
+
+      greenLight.intensity = 7.5 + Math.sin(elapsed * 2) * .8;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    function centerlessY() {
+      return 0;
+    }
+
+    animate();
+  </script>
+</body>
 </html>
