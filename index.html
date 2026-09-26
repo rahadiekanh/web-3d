@@ -3,891 +3,875 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio | Rahadieka N.H</title>
+  <title>Komputer 3D Realistis</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+      }
+    }
+  </script>
 
   <style>
     :root {
-      --dark: #101828;
-      --gray: #667085;
-      --blue: #5b8def;
-      --border: rgba(16, 24, 40, 0.08);
-      --shadow: 0 24px 70px rgba(36, 56, 99, 0.14);
+      --bg1: #07101d;
+      --bg2: #0c1830;
+      --panel: rgba(10, 17, 29, 0.78);
+      --panel-strong: rgba(18, 28, 42, 0.95);
+      --text: #edf6ff;
+      --muted: #adc7d9;
+      --blue: #49b5ff;
+      --cyan: #7ee7ff;
+      --purple: #8b5cf6;
+      --green: #4ade80;
+      --orange: #fbbf24;
+      --border: rgba(255,255,255,0.08);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
+    html { scroll-behavior: smooth; }
     body {
-      font-family: "Inter", sans-serif;
-      background: #ffffff;
-      color: var(--dark);
-      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(73, 181, 255, 0.25), transparent 25%),
+        radial-gradient(circle at 80% 10%, rgba(139, 92, 246, 0.22), transparent 28%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      line-height: 1.6;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .blur-circle {
-      position: fixed;
-      width: 330px;
-      height: 330px;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.22;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .circle-one {
-      left: -100px;
-      top: 5%;
-      background: #9abaff;
-    }
-
-    .circle-two {
-      right: -100px;
-      bottom: 5%;
-      background: #d4a7ff;
-    }
-
-    header {
+    nav {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      padding: 22px 7%;
-      transition: 0.3s ease;
-      z-index: 20;
-    }
-
-    header.scrolled {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    nav {
-      max-width: 1250px;
-      margin: auto;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      padding: 18px 7%;
+      background: rgba(6, 10, 18, 0.45);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      z-index: 50;
     }
 
-    .logo {
-      font-weight: 800;
+    .brand {
       font-size: 1.2rem;
-      letter-spacing: -1px;
-    }
-
-    .logo span,
-    h1 span,
-    .eyebrow,
-    .project-number {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--blue);
     }
 
-    .nav-links {
-      list-style: none;
+    nav .menu {
       display: flex;
-      gap: 25px;
-      color: var(--gray);
-      font-size: 0.85rem;
-      font-weight: 500;
+      gap: 22px;
     }
 
-    .nav-links a:hover {
-      color: var(--blue);
-    }
-
-    .nav-button {
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--dark);
-      border-radius: 30px;
-      padding: 11px 18px;
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
       font-weight: 600;
-      font-size: 0.85rem;
-      box-shadow: 0 8px 22px rgba(31, 48, 80, 0.08);
-      transition: 0.3s;
+      transition: 0.25s;
     }
 
-    .nav-button:hover {
-      background: var(--dark);
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .container {
-      max-width: 1250px;
-      margin: auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    section {
-      padding: 100px 7%;
-    }
+    nav a:hover { color: var(--cyan); }
 
     .hero {
       min-height: 100vh;
+      padding: 120px 7% 50px;
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1.1fr 1.4fr;
       align-items: center;
-      gap: 70px;
-      padding-top: 120px;
+      gap: 40px;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      margin-bottom: 22px;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 27px;
-      height: 2px;
-      background: var(--blue);
-      display: inline-block;
-    }
-
-    h1 {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(3.2rem, 7vw, 6.2rem);
+    .hero h1 {
+      font-size: clamp(2.7rem, 5vw, 5rem);
       line-height: 0.98;
-      letter-spacing: -4px;
+      margin-bottom: 18px;
+      letter-spacing: -0.06em;
+    }
+
+    .gradient {
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
       max-width: 620px;
+      margin-bottom: 26px;
     }
 
-    .typing-animation {
-      display: inline-block;
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 3px solid var(--blue);
-      animation: typing 3.2s steps(30, end), blink-caret 0.75s step-end infinite;
-    }
-
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-
-    @keyframes blink-caret {
-      from, to { border-color: transparent; }
-      50% { border-color: var(--blue); }
-    }
-
-    .hero-description {
-      margin-top: 26px;
-      max-width: 540px;
-      color: var(--gray);
-      font-size: 1rem;
-      line-height: 1.8;
-    }
-
-    .hero-buttons {
+    .cta-row {
       display: flex;
-      gap: 15px;
-      align-items: center;
-      margin-top: 28px;
+      gap: 16px;
       flex-wrap: wrap;
+      margin-top: 14px;
     }
 
-    .primary-button,
-    .secondary-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .btn {
+      display: inline-block;
       padding: 14px 22px;
       border-radius: 12px;
-      transition: 0.3s ease;
-      font-size: 0.9rem;
-      font-weight: 600;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
     }
 
-    .primary-button {
-      background: var(--dark);
+    .btn.primary {
+      background: linear-gradient(135deg, var(--blue), var(--purple));
       color: #fff;
-      box-shadow: 0 12px 25px rgba(16, 24, 40, 0.18);
+      box-shadow: 0 15px 30px rgba(73,181,255,0.22);
     }
 
-    .primary-button:hover {
-      background: var(--blue);
-      transform: translateY(-4px);
+    .btn.secondary {
+      border-color: var(--border);
+      color: var(--text);
+      background: rgba(255,255,255,0.02);
     }
 
-    .secondary-button {
-      background: #fff;
-      color: var(--dark);
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .stat {
+      min-width: 140px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
     }
 
-    .secondary-button:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
+    .stat strong {
+      display: block;
+      font-size: 1.5rem;
+      color: var(--cyan);
     }
 
-    .visual-area {
-      display: flex;
-      justify-content: center;
-      perspective: 1400px;
+    .stat span {
+      color: var(--muted);
+      font-size: 0.85rem;
     }
 
-    .profile-card {
+    .scene-wrap {
       position: relative;
-      width: min(390px, 90vw);
-      height: 520px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      min-height: 620px;
       border-radius: 28px;
-      background: linear-gradient(145deg, #edf4ff, #ffffff);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(73,181,255,0.18), transparent 25%),
+        linear-gradient(180deg, rgba(15, 33, 54, 0.99), rgba(8, 14, 24, 0.98));
+      border: 1px solid var(--border);
       box-shadow:
-        30px 30px 70px rgba(63, 87, 137, 0.18),
-        inset 0 0 30px rgba(255, 255, 255, 0.8);
-      transform: rotateY(-10deg) rotateX(5deg);
-      transform-style: preserve-3d;
-      transition: transform 0.2s ease-out;
+        0 30px 80px rgba(0,0,0,0.45),
+        inset 0 0 35px rgba(73,181,255,0.08);
     }
 
-    .profile-card::before,
-    .profile-card::after {
-      content: "";
+    #scene {
+      width: 100%;
+      height: 620px;
+      display: block;
+    }
+
+    .floating-label {
       position: absolute;
-      border-radius: 50%;
-      filter: blur(5px);
-    }
-
-    .profile-card::before {
-      top: -100px;
-      right: -80px;
-      width: 250px;
-      height: 250px;
-      background: rgba(129, 164, 255, 0.35);
-    }
-
-    .profile-card::after {
-      bottom: -110px;
-      left: -70px;
-      width: 260px;
-      height: 260px;
-      background: rgba(198, 160, 255, 0.27);
-    }
-
-    .card-label,
-    .floating-tag {
-      position: absolute;
-      z-index: 4;
-      border: 1px solid rgba(255, 255, 255, 0.75);
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(12px);
-      font-weight: 700;
-    }
-
-    .card-label {
-      top: 26px;
-      left: 25px;
-      padding: 9px 13px;
-      border-radius: 30px;
-      color: #50617d;
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-    }
-
-    .profile-image {
-      position: absolute;
-      right: -26px;
-      bottom: 0;
-      width: 108%;
-      height: 92%;
-      object-fit: contain;
-      object-position: bottom;
-      transform: translateZ(65px);
-      filter: drop-shadow(-20px 25px 25px rgba(50, 69, 110, 0.2));
-      transition: 0.3s ease;
-    }
-
-    .profile-card:hover .profile-image {
-      transform: translateZ(95px) scale(1.03);
-    }
-
-    .floating-tag {
-      padding: 12px 15px;
-      border-radius: 13px;
-      box-shadow: 0 12px 30px rgba(61, 81, 125, 0.13);
+      backdrop-filter: blur(10px);
+      background: rgba(10, 17, 29, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 12px;
+      color: var(--text);
       font-size: 0.75rem;
-      color: var(--dark);
-      transform: translateZ(100px);
+      letter-spacing: 0.04em;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
 
-    .tag-one {
-      top: 150px;
-      right: -28px;
-    }
+    .label-cpu { top: 80px; left: 40px; }
+    .label-ram { top: 180px; right: 50px; }
+    .label-ssd { bottom: 120px; left: 44px; }
+    .label-screen { top: 70px; right: 58px; }
 
-    .tag-two {
-      bottom: 70px;
-      left: -25px;
+    section {
+      padding: 80px 7% 30px;
     }
 
     .section-heading {
-      max-width: 600px;
-      margin-bottom: 40px;
+      text-align: center;
+      margin-bottom: 36px;
     }
 
     .section-heading h2 {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(2.2rem, 4vw, 3.5rem);
-      letter-spacing: -1.5px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 8px;
     }
 
     .section-heading p {
-      margin-top: 13px;
-      color: var(--gray);
-      line-height: 1.7;
+      color: var(--muted);
+      font-size: 1.02rem;
     }
 
-    .about-grid {
+    .cards {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
+      grid-template-columns: repeat(4, minmax(220px, 1fr));
+      gap: 22px;
     }
 
-    .info-card,
-    .profile-card-mini,
-    .certificate-card {
+    .card {
+      padding: 28px 22px;
+      border-radius: 18px;
+      background: rgba(16, 24, 36, 0.9);
       border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.8);
-      box-shadow: 0 15px 45px rgba(36, 56, 99, 0.06);
+      transition: 0.25s ease;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
     }
 
-    .info-card {
-      padding: 30px;
-      border-radius: 22px;
-      transition: 0.3s ease;
-    }
-
-    .info-card:hover,
-    .certificate-card:hover {
+    .card:hover {
       transform: translateY(-8px);
-      box-shadow: var(--shadow);
+      border-color: rgba(73,181,255,0.5);
     }
 
-    .info-card h3 {
-      margin-bottom: 13px;
-      font-size: 1.15rem;
-    }
-
-    .info-card p {
-      color: var(--gray);
-      line-height: 1.75;
-    }
-
-    .skills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .skill {
-      padding: 9px 13px;
-      border-radius: 30px;
-      background: #edf4ff;
-      color: #45639b;
-      font-weight: 600;
-      font-size: 0.78rem;
-    }
-
-    .project-grid,
-    .certificate-grid {
+    .icon {
+      width: 52px;
+      height: 52px;
       display: grid;
-      grid-template-columns: repeat(3, minmax(220px, 1fr));
-      gap: 20px;
+      place-items: center;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, rgba(73,181,255,0.22), rgba(139,92,246,0.22));
+      border: 1px solid rgba(73,181,255,0.15);
     }
 
-    .project-card {
-      min-height: 230px;
-      padding: 25px;
-      border-radius: 20px;
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--cyan);
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(200px, 1fr));
+      gap: 22px;
+      margin-top: 12px;
+    }
+
+    .step {
+      padding: 32px 24px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(73,181,255,0.08), rgba(139,92,246,0.1));
       border: 1px solid var(--border);
-      background: linear-gradient(145deg, #fff, #f6f8fc);
-      transition: 0.3s ease;
+      text-align: center;
     }
 
-    .project-card:hover {
-      transform: translateY(-10px) rotateX(3deg);
-      box-shadow: var(--shadow);
-    }
-
-    .project-number {
-      font-size: 0.8rem;
-      font-weight: 800;
-    }
-
-    .project-card h3 {
-      margin: 43px 0 10px;
-      font-size: 1.1rem;
-    }
-
-    .project-card p {
-      color: var(--gray);
-      font-size: 0.88rem;
-      line-height: 1.6;
-    }
-
-    .certificate-card {
-      overflow: hidden;
-      border-radius: 20px;
-      transition: 0.3s ease;
-    }
-
-    .certificate-card a {
-      display: block;
-      overflow: hidden;
-      background: #edf4ff;
-    }
-
-    .certificate-image {
-      width: 100%;
-      height: 210px;
-      display: block;
-      object-fit: cover;
-      transition: 0.4s ease;
-    }
-
-    .certificate-card:hover .certificate-image {
-      transform: scale(1.06);
-    }
-
-    .certificate-content {
-      padding: 20px;
-    }
-
-    .certificate-content h3 {
-      margin-bottom: 8px;
-      font-size: 1rem;
-    }
-
-    .certificate-content p {
-      color: var(--gray);
-      font-size: 0.85rem;
-      line-height: 1.6;
-    }
-
-    .certificate-year {
-      display: inline-block;
-      margin-top: 13px;
-      padding: 6px 10px;
-      border-radius: 20px;
-      background: #edf4ff;
-      color: #45639b;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-
-    .profile-box {
-      padding: 30px 0 0;
-    }
-
-    .profile-card-mini {
-      max-width: 720px;
-      margin: auto;
-      padding: 32px;
-      border-radius: 26px;
+    .step-number {
+      width: 46px;
+      height: 46px;
       display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 24px;
-      align-items: center;
-    }
-
-    .profile-box img {
-      width: 220px;
-      height: 220px;
-      object-fit: cover;
-      border-radius: 20px;
-      border: 6px solid #eaf1ff;
-      display: block;
-      margin: auto;
-    }
-
-    .profile-text h3 {
-      font-size: 2rem;
-      margin-bottom: 8px;
-    }
-
-    .kelas {
-      color: var(--blue);
+      place-items: center;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: white;
       font-weight: 700;
-      margin-bottom: 12px;
+      font-size: 1.2rem;
     }
 
-    .profile-text p {
-      color: var(--gray);
-      line-height: 1.8;
+    .step h3 {
+      margin-bottom: 12px;
+      color: var(--cyan);
+    }
+
+    .step p {
+      color: var(--muted);
     }
 
     footer {
-      border-top: 1px solid var(--border);
+      padding: 40px 7% 80px;
       text-align: center;
-      padding: 35px 7%;
-      color: var(--gray);
-      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
     }
 
-    @media (max-width: 950px) {
-      .nav-links {
-        gap: 12px;
-        font-size: 0.75rem;
-      }
-
+    @media (max-width: 980px) {
       .hero {
-        gap: 40px;
+        grid-template-columns: 1fr;
       }
 
-      .project-grid,
-      .certificate-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .cards {
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+      }
+
+      .flow {
+        grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 850px) {
-      .nav-links {
+    @media (max-width: 600px) {
+      nav .menu {
         display: none;
       }
 
-      .hero {
-        grid-template-columns: 1fr;
-        gap: 50px;
-        padding-top: 150px;
-      }
-
-      .visual-area {
-        order: -1;
-      }
-
-      .profile-card {
-        height: 460px;
-      }
-
-      .about-grid,
-      .profile-card-mini {
+      .cards {
         grid-template-columns: 1fr;
       }
 
-      .profile-box img {
-        width: 220px;
-      }
-    }
-
-    @media (max-width: 550px) {
-      section {
-        padding: 80px 7%;
+      .scene-wrap,
+      #scene {
+        height: 440px;
       }
 
-      .nav-button {
+      .floating-label {
         display: none;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .primary-button,
-      .secondary-button {
-        width: 100%;
-      }
-
-      .project-grid,
-      .certificate-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .profile-card-mini {
-        padding: 22px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="blur-circle circle-one"></div>
-  <div class="blur-circle circle-two"></div>
+  <nav>
+    <div class="brand">PC 3D</div>
+    <div class="menu">
+      <a href="#komponen">Komponen</a>
+      <a href="#proses">Cara Kerja</a>
+      <a href="#detail">Detail</a>
+    </div>
+  </nav>
 
-  <header id="navbar">
-    <nav>
-      <a href="#home" class="logo">PORTOFOLIO<span>.</span></a>
+  <section class="hero">
+    <div class="content">
+      <h1>Komputer <span class="gradient">modern</span> dalam bentuk 3D.</h1>
+      <p class="subtitle">
+        Komputer adalah mesin elektronik yang menerima data, memprosesnya dengan
+        instruksi tertentu, menyimpan hasilnya, dan menampilkan output yang
+        bermanfaat bagi manusia. Dalam satu sistem, CPU, RAM, SSD, monitor, dan
+        perangkat input/output bekerja secara harmonis.
+      </p>
 
-      <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#certificates">Sertifikat</a></li>
-        <li><a href="#profile">Profile</a></li>
-      </ul>
-
-      <a href="mailto:rahadieka@example.com" class="nav-button">
-        Contact Me
-      </a>
-    </nav>
-  </header>
-
-  <main class="container">
-    <section class="hero" id="home">
-      <div>
-        <div class="eyebrow">Student Portfolio</div>
-
-        <h1 class="typing-animation">
-          Hello, I am <span>Rahadieka N.H</span>
-        </h1>
-
-        <p class="hero-description">
-          Saya adalah siswa kelas XI TKJ 4. Saya tertarik pada dunia teknologi,
-          editing, dan desain. Saya terus belajar untuk menciptakan karya yang
-          rapi, modern, dan bermanfaat.
-        </p>
-
-        <div class="hero-buttons">
-          <a href="#projects" class="primary-button">Lihat Portfolio</a>
-          <a href="#profile" class="secondary-button">Profil Saya</a>
-        </div>
+      <div class="cta-row">
+        <a href="#komponen" class="btn primary">Lihat Komponen</a>
+        <a href="#proses" class="btn secondary">Cara Kerja</a>
       </div>
 
-      <div class="visual-area">
-        <div class="profile-card" id="profileCard">
-          <div class="card-label">XI TKJ 4</div>
-
-          <img
-            src="assets/gojo-satoru.png"
-            alt="Foto Rahadieka N.H"
-            class="profile-image"
-          />
-
-          <div class="floating-tag tag-one">Tech Student</div>
-          <div class="floating-tag tag-two">Web Developer</div>
+      <div class="stats">
+        <div class="stat">
+          <strong>CPU</strong>
+          <span>Otak komputer</span>
+        </div>
+        <div class="stat">
+          <strong>RAM</strong>
+          <span>Memori cepat</span>
+        </div>
+        <div class="stat">
+          <strong>SSD</strong>
+          <span>Penyimpanan</span>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section id="about">
-      <div class="section-heading">
-        <div class="eyebrow">Get to know me</div>
+    <div class="scene-wrap">
+      <div id="scene"></div>
 
-        <h2>Belajar, berinovasi, berkembang.</h2>
+      <div class="floating-label label-cpu">CPU / Processor</div>
+      <div class="floating-label label-ram">RAM</div>
+      <div class="floating-label label-ssd">SSD Storage</div>
+      <div class="floating-label label-screen">Display / Monitor</div>
+    </div>
+  </section>
 
+  <section id="komponen">
+    <div class="section-heading">
+      <h2>Komponen Utama Komputer</h2>
+      <p>Setiap bagian memiliki fungsi penting dalam sistem komputer.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🧠</div>
+        <h3>CPU</h3>
         <p>
-          Saya percaya bahwa teknologi bukan hanya alat, tetapi juga media
-          untuk menciptakan solusi yang lebih baik dan inovatif.
+          CPU adalah unit pemrosesan pusat yang mengerjakan instruksi,
+          menghitung, dan menjalankan aplikasi.
         </p>
       </div>
 
-      <div class="about-grid">
-        <div class="info-card">
-          <h3>My Philosophy</h3>
-          <p>
-            Saya ingin terus belajar, membangun keterampilan, dan menghasilkan
-            sesuatu yang bermanfaat untuk diri sendiri dan orang lain.
-          </p>
-        </div>
-
-        <div class="info-card">
-          <h3>My Skills</h3>
-          <p>Beberapa hal yang saya pelajari:</p>
-
-          <div class="skills">
-            <span class="skill">HTML</span>
-            <span class="skill">Mikrotik</span>
-            <span class="skill">VirtualBox</span>
-            <span class="skill">Network</span>
-            <span class="skill">Computer</span>
-            <span class="skill">FiberOptic</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects">
-      <div class="section-heading">
-        <div class="eyebrow">Selected work</div>
-
-        <h2>Proyek belajar saya.</h2>
-
+      <div class="card">
+        <div class="icon">⚡</div>
+        <h3>RAM</h3>
         <p>
-          Beberapa tugas dan ide yang saya buat selama proses belajar.
+          RAM menyimpan data sementara agar proses berjalan cepat.
+          Semakin besar RAM, semakin lancar multitasking.
         </p>
       </div>
 
-      <div class="project-grid">
-        <article class="project-card">
-          <div class="project-number">01 / WEB</div>
-          <h3>Landing Page</h3>
-          <p>
-            Membuat tampilan halaman web yang modern dan responsif.
-          </p>
-        </article>
-
-        <article class="project-card">
-          <div class="project-number">02 / UI</div>
-          <h3>Portfolio</h3>
-          <p>
-            Menyusun portofolio dengan desain yang rapi dan profesional.
-          </p>
-        </article>
-
-        <article class="project-card">
-          <div class="project-number">03 / TECH</div>
-          <h3>IT Learning</h3>
-          <p>
-            Mempelajari teknologi dan cara mengimplementasikannya dalam proyek.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="certificates">
-      <div class="section-heading">
-        <div class="eyebrow">Certificates</div>
-
-        <h2>Sertifikat saya.</h2>
-
+      <div class="card">
+        <div class="icon">💾</div>
+        <h3>Storage</h3>
         <p>
-          Beberapa sertifikat yang saya dapatkan dari pembelajaran,
-          pelatihan, dan kegiatan pengembangan diri.
+          SSD atau HDD menyimpan sistem operasi, file, aplikasi, dan data
+          permanen komputer.
         </p>
       </div>
 
-      <div class="certificate-grid">
-        <article class="certificate-card">
-          <a href="assets/Sertifikat-FiberOptic.jpg" target="_blank">
-            <img
-              src="assets/Sertifikat-FiberOptic.jpg"
-              alt="Sertifikat Fiber Optic"
-              class="certificate-image"
-            />
-          </a>
-
-          <div class="certificate-content">
-            <h3>Fiber Optic</h3>
-            <p>
-              Sertifikat pembelajaran dasar Fiber Optic.
-            </p>
-            <span class="certificate-year">2026</span>
-          </div>
-        </article>
-
-        <article class="certificate-card">
-          <a href="assets/sertifikat-2.jpg" target="_blank">
-            <img
-              src="assets/sertifikat-2.jpg"
-              alt="Sertifikat JavaScript"
-              class="certificate-image"
-            />
-          </a>
-
-          <div class="certificate-content">
-            <h3>JavaScript Dasar</h3>
-            <p>
-              Sertifikat pembelajaran JavaScript dan dasar-dasar pemrograman web.
-            </p>
-            <span class="certificate-year">2026</span>
-          </div>
-        </article>
-
-        <article class="certificate-card">
-          <a href="assets/sertifikat-3.jpg" target="_blank">
-            <img
-              src="assets/sertifikat-3.jpg"
-              alt="Sertifikat Teknologi Informasi"
-              class="certificate-image"
-            />
-          </a>
-
-          <div class="certificate-content">
-            <h3>Teknologi Informasi</h3>
-            <p>
-              Sertifikat kegiatan atau pelatihan di bidang teknologi informasi.
-            </p>
-            <span class="certificate-year">2026</span>
-          </div>
-        </article>
+      <div class="card">
+        <div class="icon">🖥️</div>
+        <h3>Monitor</h3>
+        <p>
+          Monitor menampilkan hasil pemrosesan komputer dalam bentuk text,
+          gambar, video, dan antarmuka visual.
+        </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="profile">
-      <div class="section-heading">
-        <div class="eyebrow">Profile</div>
+  <section id="proses">
+    <div class="section-heading">
+      <h2>Bagaimana Komputer Bekerja?</h2>
+      <p>Proses kerja komputer secara umum terdiri dari tiga tahap dasar.</p>
+    </div>
 
-        <h2>Data diri saya.</h2>
+    <div class="flow">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Input</h3>
+        <p>
+          Pengguna memasukkan data melalui keyboard, mouse, microphone, scanner,
+          atau perangkat lain.
+        </p>
       </div>
 
-      <div class="profile-box">
-        <div class="profile-card-mini">
-          <img
-            src="assets/gojo-profile.png"
-            alt="Foto Rahadieka N.H"
-          />
-
-          <div class="profile-text">
-            <h3>Rahadieka N.H</h3>
-
-            <div class="kelas">XI TKJ 4</div>
-
-            <p>
-              Saya adalah siswa yang tersusun dari beberapa tragedi hebat
-              dalam hidupku. Jika kamu menungguku menyerah, kamu akan
-              menungguku selamanya.
-            </p>
-          </div>
-        </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Processing</h3>
+        <p>
+          CPU memproses data sesuai program. RAM membantu data bergerak cepat
+          selama proses berlangsung.
+        </p>
       </div>
-    </section>
-  </main>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Output</h3>
+        <p>
+          Hasilnya ditampilkan pada monitor, dihasilkan suara melalui speaker,
+          atau dicetak melalui printer.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="detail">
+    <div class="section-heading">
+      <h2>Detail Teknologi dalam Komputer</h2>
+      <p>Komputer modern terdiri dari perangkat keras dan perangkat lunak yang saling berhubungan.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon">📡</div>
+        <h3>Motherboard</h3>
+        <p>
+          Papan utama yang menghubungkan CPU, RAM, GPU, SSD, dan komponen lain
+          agar dapat berkomunikasi.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🎮</div>
+        <h3>GPU</h3>
+        <p>
+          GPU memproses grafik dan visual. Sangat penting untuk gaming, edit video,
+          dan rendering 3D.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🔋</div>
+        <h3>Power Supply</h3>
+        <p>
+          PSU menyediakan daya listrik ke semua komponen agar komputer dapat
+          bekerja dengan stabil.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🧩</div>
+        <h3>Software</h3>
+        <p>
+          Sistem operasi dan aplikasi adalah instruksi yang membuat perangkat keras
+          dapat digunakan untuk kebutuhan manusia.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <footer>
-    © 2026 Rahadieka N.H | XI TKJ 4
+    © 2025 Komputer 3D Realistis — Website edukasi teknologi komputer
   </footer>
 
-  <script>
-    const navbar = document.getElementById("navbar");
-    const profileCard = document.getElementById("profileCard");
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-    window.addEventListener("scroll", () => {
-      navbar.classList.toggle("scrolled", window.scrollY > 30);
+    const container = document.getElementById("scene");
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x091522);
+
+    const camera = new THREE.PerspectiveCamera(
+      40,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(7.8, 4.2, 9.5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.enablePan = false;
+    controls.enableZoom = true;
+    controls.minDistance = 6;
+    controls.maxDistance = 15;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 1.2;
+
+    const room = new THREE.Group();
+    scene.add(room);
+
+    const floor = new THREE.Mesh(
+      new THREE.CircleGeometry(16, 96),
+      new THREE.MeshStandardMaterial({
+        color: 0x0f2136,
+        roughness: 0.82,
+        metalness: 0.15
+      })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -2.15;
+    room.add(floor);
+
+    // refleksi soft lighting
+    const glow = new THREE.Mesh(
+      new THREE.CircleGeometry(7, 64),
+      new THREE.MeshBasicMaterial({
+        color: 0x182d43,
+        transparent: true,
+        opacity: 0.28
+      })
+    );
+    glow.rotation.x = -Math.PI / 2;
+    glow.position.y = -2.1;
+    room.add(glow);
+
+    // Light setup
+    scene.add(new THREE.AmbientLight(0xcfeaff, 1.5));
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    keyLight.position.set(5, 8, 6);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.PointLight(0x57b8ff, 30, 18, 2);
+    rimLight.position.set(-5, 4, -3);
+    scene.add(rimLight);
+
+    const purpleLight = new THREE.PointLight(0x8b5cf6, 22, 20, 2);
+    purpleLight.position.set(5, 2, 6);
+    scene.add(purpleLight);
+
+    const desk = new THREE.Group();
+    room.add(desk);
+
+    const deskBody = new THREE.Mesh(
+      new THREE.BoxGeometry(9, 0.4, 4.4),
+      new THREE.MeshStandardMaterial({
+        color: 0x2c3b4d,
+        roughness: 0.55,
+        metalness: 0.55
+      })
+    );
+    deskBody.position.y = -1.3;
+    desk.add(deskBody);
+
+    const deskLegGeom = new THREE.CylinderGeometry(0.12, 0.12, 1.5, 18);
+    const legMat = new THREE.MeshStandardMaterial({
+      color: 0x1d2d3d,
+      metalness: 0.8,
+      roughness: 0.35
     });
 
-    profileCard.addEventListener("mousemove", (event) => {
-      const rect = profileCard.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+    for (let x of [-4.3, 4.3]) {
+      for (let z of [-1.8, 1.8]) {
+        const leg = new THREE.Mesh(deskLegGeom, legMat);
+        leg.position.set(x, -2.1, z);
+        desk.add(leg);
+      }
+    }
 
-      const rotateY = ((x / rect.width) - 0.5) * 18;
-      const rotateX = ((y / rect.height) - 0.5) * -18;
+    const computer = new THREE.Group();
+    room.add(computer);
 
-      profileCard.style.transform =
-        `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
+    // Monitor body
+    const monitorFrame = new THREE.Mesh(
+      new THREE.BoxGeometry(3.6, 2.3, 0.22),
+      new THREE.MeshStandardMaterial({
+        color: 0x111a25,
+        metalness: 0.85,
+        roughness: 0.22
+      })
+    );
+    monitorFrame.position.set(-2.5, 1.1, -1.2);
+    computer.add(monitorFrame);
 
-    profileCard.addEventListener("mouseleave", () => {
-      profileCard.style.transform = "rotateY(-10deg) rotateX(5deg)";
+    // Screen glass
+    const screen = new THREE.Mesh(
+      new THREE.BoxGeometry(3.18, 1.82, 0.08),
+      new THREE.MeshPhysicalMaterial({
+        color: 0x7ee7ff,
+        emissive: 0x0b2d43,
+        emissiveIntensity: 0.8,
+        roughness: 0.15,
+        metalness: 0.38,
+        transparent: true,
+        opacity: 0.86
+      })
+    );
+    screen.position.set(-2.5, 1.1, -1.04);
+    computer.add(screen);
+
+    // Monitor stand
+    const stand = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.12, 0.12, 1.6, 32),
+      new THREE.MeshStandardMaterial({
+        color: 0x2d3d4d,
+        metalness: 0.8,
+        roughness: 0.35
+      })
+    );
+    stand.position.set(-2.5, -0.3, -1.2);
+    computer.add(stand);
+
+    const monitorBase = new THREE.Mesh(
+      new THREE.BoxGeometry(1.2, 0.12, 0.9),
+      new THREE.MeshStandardMaterial({
+        color: 0x181f2b,
+        metalness: 0.7,
+        roughness: 0.26
+      })
+    );
+    monitorBase.position.set(-2.5, -1.15, -1.2);
+    computer.add(monitorBase);
+
+    // Tower PC
+    const tower = new THREE.Mesh(
+      new THREE.BoxGeometry(2.2, 5.5, 2.2),
+      new THREE.MeshStandardMaterial({
+        color: 0x111c27,
+        metalness: 0.75,
+        roughness: 0.28
+      })
+    );
+    tower.position.set(2.8, 0.7, -1.0);
+    computer.add(tower);
+
+    // Glass side
+    const towerGlass = new THREE.Mesh(
+      new THREE.BoxGeometry(1.8, 4.8, 1.65),
+      new THREE.MeshPhysicalMaterial({
+        color: 0x6bd9ff,
+        transparent: true,
+        opacity: 0.14,
+        emissive: 0x0d3d60,
+        emissiveIntensity: 0.9,
+        roughness: 0.06,
+        metalness: 0.18
+      })
+    );
+    towerGlass.position.set(2.8, 0.72, -1.0);
+    computer.add(towerGlass);
+
+    // Vent slots
+    for (let i = 0; i < 8; i++) {
+      const vent = new THREE.Mesh(
+        new THREE.BoxGeometry(0.08, 2.2, 1.25),
+        new THREE.MeshStandardMaterial({
+          color: 0x49b5ff,
+          emissive: 0x0c2d4f,
+          emissiveIntensity: 1.2,
+          metalness: 0.5,
+          roughness: 0.2
+        })
+      );
+      vent.position.set(3.75, 0.65, -1.0 + i * 0.12);
+      computer.add(vent);
+    }
+
+    // CPU
+    const cpu = new THREE.Mesh(
+      new THREE.BoxGeometry(0.8, 0.8, 0.18),
+      new THREE.MeshStandardMaterial({
+        color: 0x8b5cf6,
+        emissive: 0x2a185c,
+        emissiveIntensity: 1.6,
+        metalness: 0.7,
+        roughness: 0.22
+      })
+    );
+    cpu.position.set(2.8, 2.0, -1.0);
+    computer.add(cpu);
+
+    // Motherboard
+    const motherboard = new THREE.Mesh(
+      new THREE.BoxGeometry(1.65, 3.2, 0.12),
+      new THREE.MeshStandardMaterial({
+        color: 0x173444,
+        emissive: 0x081d2b,
+        emissiveIntensity: 0.8,
+        metalness: 0.5,
+        roughness: 0.32
+      })
+    );
+    motherboard.position.set(2.8, 0.65, -1.1);
+    computer.add(motherboard);
+
+    // RAM modules
+    for (let i = 0; i < 4; i++) {
+      const ram = new THREE.Mesh(
+        new THREE.BoxGeometry(0.18, 1.15, 0.1),
+        new THREE.MeshStandardMaterial({
+          color: 0x49b5ff,
+          emissive: 0x0e2a42,
+          emissiveIntensity: 1.5,
+          metalness: 0.5,
+          roughness: 0.22
+        })
+      );
+      ram.position.set(2.25 + i * 0.25, 0.7, -1.03);
+      computer.add(ram);
+    }
+
+    // SSD
+    const ssd = new THREE.Mesh(
+      new THREE.BoxGeometry(0.9, 0.5, 0.18),
+      new THREE.MeshStandardMaterial({
+        color: 0x5eead4,
+        emissive: 0x0b3d39,
+        emissiveIntensity: 1.1,
+        metalness: 0.7,
+        roughness: 0.25
+      })
+    );
+    ssd.position.set(2.85, -0.85, -1.03);
+    computer.add(ssd);
+
+    // Keyboard
+    const keyboard = new THREE.Group();
+    keyboard.position.set(-0.7, -1.2, 2.3);
+
+    const kbBase = new THREE.Mesh(
+      new THREE.BoxGeometry(3.8, 0.22, 1.6),
+      new THREE.MeshStandardMaterial({
+        color: 0x171f2b,
+        metalness: 0.65,
+        roughness: 0.28
+      })
+    );
+    keyboard.add(kbBase);
+
+    for (let x = -1.45; x <= 1.45; x += 0.28) {
+      for (let z = -0.55; z <= 0.55; z += 0.22) {
+        const key = new THREE.Mesh(
+          new THREE.BoxGeometry(0.18, 0.06, 0.12),
+          new THREE.MeshStandardMaterial({
+            color: 0xdfeaf6,
+            roughness: 0.5,
+            metalness: 0.15
+          })
+        );
+        key.position.set(x, 0.14, z);
+        keyboard.add(key);
+      }
+    }
+
+    computer.add(keyboard);
+
+    // Mouse
+    const mouse = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.5, 0.5, 0.18, 32),
+      new THREE.MeshStandardMaterial({
+        color: 0x1f2937,
+        metalness: 0.8,
+        roughness: 0.32
+      })
+    );
+    mouse.rotation.x = Math.PI / 2;
+    mouse.position.set(3.8, -1.28, 2.3);
+    computer.add(mouse);
+
+    // Small decorative cable
+    const cable = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.05, 0.05, 2.8, 16),
+      new THREE.MeshStandardMaterial({
+        color: 0x4ade80,
+        metalness: 0.5,
+        roughness: 0.35
+      })
+    );
+    cable.rotation.z = Math.PI / 2;
+    cable.position.set(0.1, -1.0, 0.3);
+    computer.add(cable);
+
+    // A subtle floating tech ring
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(6.8, 0.04, 16, 120),
+      new THREE.MeshBasicMaterial({ color: 0x49b5ff, transparent: true, opacity: 0.35 })
+    );
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = -1.8;
+    scene.add(ring);
+
+    controls.target.set(0, 0.6, -0.2);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      ring.rotation.z += 0.005;
+      screen.material.emissiveIntensity = 0.7 + Math.sin(Date.now() * 0.002) * 0.2;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
     });
   </script>
 </body>
